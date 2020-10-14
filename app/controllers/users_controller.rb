@@ -3,13 +3,21 @@ class UsersController < ApplicationController
   
     # REGISTER
     def create
-      @user = User.create(user_params)
-      if @user.valid?
-        token = encode_token({user_id: @user.id})
-        render json: {user: @user, token: token}
-      else
-        render json: {error: "Invalid username or password"}
+      existing_user = User.find_by(username: params[:username])
+      # Check if user already exists, if they do return error
+      if existing_user
+        render json: {error: "User already exists"}
+      else # username is not taken
+        # Make new user
+        @user = User.create(user_params)
+        if @user.valid?
+          token = encode_token({user_id: @user.id})
+          render json: {user: @user, token: token}
+        else
+          render json: {error: "Invalid username or password"}
+        end
       end
+      
     end
   
     # LOGGING IN
@@ -17,7 +25,8 @@ class UsersController < ApplicationController
       @user = User.find_by(username: params[:username])
   
       if @user && @user.authenticate(params[:password])
-        token = encode_token({user_id: @user.id})
+        # make new token and salt it so its different
+        token = JWT.encode({user_id: @user.id, salt: token_salt}, 's3cr3t')
         render json: {user: @user, token: token}
       else
         render json: {error: "Invalid username or password"}
@@ -32,8 +41,8 @@ class UsersController < ApplicationController
             @user = User.find_by(id: decoded_token[0]['user_id'])
             if @user # user exists
                 # update the device_key for the user
-                @user.update(device_key:params[:deviceKey])
-                render json: {status: "Device Key Succesfully Posted",  user: @user}
+                @user.update(device_key: params[:deviceKey])
+                render json: {status: "Device Key Succesfully Posted"}
             else
                 render json: {error: "Invalid User"}
             end
@@ -45,6 +54,10 @@ class UsersController < ApplicationController
   
     def auto_login
       render json: @user
+    end
+
+    def token_salt
+      ('0'..'z').to_a.shuffle.first(8).join
     end
   
     private
