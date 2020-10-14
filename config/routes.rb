@@ -5,4 +5,5 @@ Rails.application.routes.draw do
   get "/auto_login", to: "users#auto_login"
   post "/device_key", to: "users#device_key"
   delete "/delete", to: "users#delete"
+  post "/logout", to: "users#logout"
 end
