@@ -33,14 +33,13 @@ class UsersController < ApplicationController
             if @user # user exists
                 # update the device_key for the user
                 @user.update(device_key:params[:deviceKey])
-                render json: {user: @user}
+                render json: {status: "Device Key Succesfully Posted",  user: @user}
             else
                 render json: {error: "Invalid User"}
             end
         else # token is null
             render json: {error: "Invalid Token"}
         end
-        
     end
   
   
