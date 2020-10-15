@@ -12,7 +12,7 @@ class UsersController < ApplicationController
         @user = User.create(user_params)
         if @user.valid?
           new_access_token = create_access_token(@user.id)
-          render json: {user: @user, token: {accessToken: new_access_token.jwt, expiration: new_access_token.expiration }}
+          render json: {user: @user, token: {accessToken: new_access_token.jwt, accessTokenExpiration: new_access_token.expiration }}
         else
           render json: {error: "Invalid username or password"}
         end
@@ -36,6 +36,25 @@ class UsersController < ApplicationController
         render json: {user: @user, token: {accessToken: new_access_token.jwt, expiration: new_access_token.expiration }}
       else
         render json: {error: "Invalid username or password"}
+      end
+    end
+
+    # REFRESH
+    def refresh 
+      decoded_token = JWT.decode(params[:token], 's3cr3t', true, algorithm: 'HS256')
+      # Check if token was decoded
+      if decoded_token
+          @user = User.find_by(id: decoded_token[0]['user_id'])
+          if @user # user exists
+              Blacklist.find_by(jwt: params[:token]).delete
+              # update the device_key for the user
+              new_access_token = create_access_token(@user.id)
+              render json: {status: "Refreshed Access Token", token: {accessToken: new_access_token.jwt, expiration: new_access_token.expiration }}
+          else
+              render json: {error: "Invalid User"}
+          end
+      else # token is null
+          render json: {error: "Invalid Token"}
       end
     end
 
@@ -114,7 +133,7 @@ class UsersController < ApplicationController
     # Creates a new Blacklist token with expiration to Blacklist table and returns it
     def create_access_token(user_id)
       # Create new access token
-      token = JWT.encode({user_id: user_id, salt: token_salt()}, 's3cr3t')
+      token = JWT.encode({user_id: user_id, type: "access", salt: token_salt()}, 's3cr3t')
       exp_time = Time.now + 15*60
       Blacklist.create({ jwt: token, expiration: exp_time })
     end

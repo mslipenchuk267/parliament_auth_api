@@ -6,4 +6,5 @@ Rails.application.routes.draw do
   post "/device_key", to: "users#device_key"
   delete "/delete", to: "users#delete"
   post "/logout", to: "users#logout"
+  post "/refresh", to: "users#refresh"
 end
