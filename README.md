@@ -20,23 +20,28 @@ This API is responsible for authenticating users and interacting with the user d
     - Example Payload: 
     ```
     { 
-      "username":"exampleUser", 
-      "password":"examplePassword" 
+      "username":"example@example.com", 
+      "password":"password" 
     }
     ```
     - Example Successful Return:
     ```
     {
-      "user": {
-          "id": 2837729,
-          "username": "abc@example.com",
-          "password_digest": "$2a$12$rwK30VcjoM9L6iendeyM9.wAktjfU8MlUbBI2O11BH.QK.vNukCwW",
-          "device_key": "testKey",
-          "created_at": "2020-10-13T19:00:27.836Z",
-          "updated_at": "2020-10-14T01:25:23.774Z"
-      },
-      "token": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyfQ.68NcogyO1TlhwSp7ZzrgcaxSxTw6tedbiw-zuAUbubg"
-    }
+         "user": {
+             "id": 3,
+             "username": "example@example.com",
+             "password_digest": "$2a$12$08p1thhSwbRpyJiiQi./uu.fUl2L7OPEpz9JwscvL4ueH0LJqCazO",
+             "device_key": null,
+             "created_at": "2020-10-15T06:09:07.237Z",
+             "updated_at": "2020-10-15T06:09:07.237Z"
+         },
+         "auth": {
+             "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJ0eXBlIjoiYWNjZXNzIiwic2FsdCI6IlxcVG9qPWFOZCJ9.LhrFlPQjmhOMZRks2oP4jIC9O5gKltBwsYs-Vy39Bic",
+             "accessTokenExpiration": "2020-10-15T06:24:07.245Z",
+             "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJ0eXBlIjoicmVmcmVzaCIsInNhbHQiOiJma191MEk4SCJ9.haRij-MTblMtZIa9quxorRsiz_oT10yiMkp8w4aoKEI",
+             "refreshTokenExpiration": "2020-11-14T06:09:07.253Z"
+         }
+     }
 - ```/login ```
     - Login an existing user
     - Example Payload: 
@@ -49,36 +54,80 @@ This API is responsible for authenticating users and interacting with the user d
     - Example Successful Return:
     ```
     {
-      "user": {
-          "id": 2837729,
-          "username": "abc@example.com",
-          "password_digest": "$2a$12$rwK30VcjoM9L6iendeyM9.wAktjfU8MlUbBI2O11BH.QK.vNukCwW",
-          "device_key": "testKey",
-          "created_at": "2020-10-13T19:00:27.836Z",
-          "updated_at": "2020-10-14T01:25:23.774Z"
-      },
-      "token": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyfQ.68NcogyO1TlhwSp7ZzrgcaxSxTw6tedbiw-zuAUbubg"
+         "user": {
+             "id": 3,
+             "username": "example@example.com",
+             "password_digest": "$2a$12$08p1thhSwbRpyJiiQi./uu.fUl2L7OPEpz9JwscvL4ueH0LJqCazO",
+             "device_key": null,
+             "created_at": "2020-10-15T06:09:07.237Z",
+             "updated_at": "2020-10-15T06:09:07.237Z"
+         },
+         "auth": {
+             "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJ0eXBlIjoiYWNjZXNzIiwic2FsdCI6IlxcVG9qPWFOZCJ9.LhrFlPQjmhOMZRks2oP4jIC9O5gKltBwsYs-Vy39Bic",
+             "accessTokenExpiration": "2020-10-15T06:24:07.245Z",
+             "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJ0eXBlIjoicmVmcmVzaCIsInNhbHQiOiJma191MEk4SCJ9.haRij-MTblMtZIa9quxorRsiz_oT10yiMkp8w4aoKEI",
+             "refreshTokenExpiration": "2020-11-14T06:09:07.253Z"
+         }
+     }
+- ```/refresh ```
+    - Refreshes a users refresh and access tokens
+    - Example Payload: 
+    ```
+      { 
+        "refreshToken":"eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyfQ.68NcogyO1TlhZSp7ZzrgcaxSxTw6tedbiw-zuAUbubg"
+      }
+    ```
+    - Example Successful Return:
+    ```
+    {
+         "status": "Refreshed Tokens",
+         "auth": {
+             "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJ0eXBlIjoiYWNjZXNzIiwic2FsdCI6IlxcVG9qPWFOZCJ9.LhrFlPQjmhOMZRks2oP4jIC9O5gKltBwsYs-Vy39Bic",
+             "accessTokenExpiration": "2020-10-15T06:24:07.245Z",
+             "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJ0eXBlIjoicmVmcmVzaCIsInNhbHQiOiJma191MEk4SCJ9.haRij-MTblMtZIa9quxorRsiz_oT10yiMkp8w4aoKEI",
+             "refreshTokenExpiration": "2020-11-14T06:09:07.253Z"
+         }
+     }
+- ```/logout ```
+    - Logout a user
+    - Example Payload: 
+    ```
+      { 
+        "accessToken":"eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyfQ.68NcogyO1TlhZSp7ZzrgcaxSxTw6tedbiw-zuAUbubg"
+      }
+    ```
+    - Example Successful Return:
+    ```
+    {
+      "status": "User was succesfully logged out"
+    }
+- ```/delete ```
+    - Delete a user
+    - Example Payload: 
+    ```
+      { 
+        "accessToken":"eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyfQ.68NcogyO1TlhZSp7ZzrgcaxSxTw6tedbiw-zuAUbubg",
+        "refreshToken":"rt4hbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyfQ.58NcogyO1TlhZSp7dzrgcaxwxTw6tedbww-zuAUbrbg"
+      }
+    ```
+    - Example Successful Return:
+    ```
+    {
+      "status": "User was succesfully deleted"
     }
 - ```/device_key ```
     - Update a users push notification device key
     - Example Payload: 
     ```
       { 
-        "token":"eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyfQ.68NcogyO1TlhZSp7ZzrgcaxSxTw6tedbiw-zuAUbubg", 
+        "accessToken":"eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyfQ.68NcogyO1TlhZSp7ZzrgcaxSxTw6tedbiw-zuAUbubg", 
         "deviceKey":"testKey"
       }
     ```
     - Example Successful Return:
     ```
     {
-      "status": "Device Key Succesfully Posted",
-      "user": {
-          "id": 2,
-          "device_key": "testKey",
-          "password_digest": "$2a$12$rfD20VcjoM9X6ienOeyM9.wAdsjfU8MlUPBI2O11BH.QK.vNukCwW",
-          "username": "abc@ex3ample.com",
-          "created_at": "2020-10-13T19:00:27.836Z",
-          "updated_at": "2020-10-14T01:25:23.774Z"
+      "status": "Device Key Succesfully Posted"
     }
 
     
