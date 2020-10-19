@@ -45,6 +45,8 @@ class UsersController < ApplicationController
       decoded_refresh_token = JWT.decode(params[:refreshToken], 's3cr3t', true, algorithm: 'HS256')
       # Check if token was decoded
       if decoded_refresh_token
+        refresh_token_record = Blacklist.find_by(jwt: params[:refreshToken])
+        if refresh_token_record && Time.now < refresh_token_record.expiration 
           @user = User.find_by(id: decoded_refresh_token[0]['user_id'])
           if @user # user exists
               Blacklist.find_by(jwt: params[:refreshToken]).delete
@@ -55,6 +57,9 @@ class UsersController < ApplicationController
           else
               render json: {error: "Invalid User"}
           end
+        else
+          render json: {status: "Token Expired"}
+        end          
       else # token is null
           render json: {error: "Invalid Token"}
       end

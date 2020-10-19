@@ -78,8 +78,17 @@ test:
 #   production:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
+
+# production:
+#   <<: *default
+#   database: parliament_auth_api_production
+#   username: parliament_auth_api
+#   password: <%= ENV['PARLIAMENT_AUTH_API_DATABASE_PASSWORD'] %>
+
 production:
   <<: *default
-  database: parliament_auth_api_production
-  username: parliament_auth_api
-  password: <%= ENV['PARLIAMENT_AUTH_API_DATABASE_PASSWORD'] %>
+  database: <%= ENV['DB_NAME'] %>
+  username: <%= ENV['DB_USERNAME'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
+  host: <%= ENV['DB_URL'] %>
+  port: 5432
