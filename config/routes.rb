@@ -7,4 +7,5 @@ Rails.application.routes.draw do
   delete "/delete", to: "users#delete"
   post "/logout", to: "users#logout"
   post "/refresh", to: "users#refresh"
+  post "/validate", to: "users#validate"
 end
