@@ -133,6 +133,17 @@ class UsersController < ApplicationController
           render json: {error: "Invalid Tokens"}
       end
     end
+
+    def validate
+      # try to see if accessToken exists in Blacklist
+      access_token_record = Blacklist.find_by(jwt: params[:accessToken])
+      # if it exists, and isn't expired return success status
+      if access_token_record && Time.now < access_token_record.expiration
+        render json: {status: "Valid Token"}
+      else 
+        render json: {error: "Expired Token"}
+      end
+    end
   
   
     def auto_login
