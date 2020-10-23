@@ -1,3 +1,4 @@
+
 class UsersController < ApplicationController
     before_action :authorized, only: [:auto_login]
   
@@ -144,6 +145,24 @@ class UsersController < ApplicationController
         render json: {error: "Expired Token"}
       end
     end
+
+    # Gets device keys from User table
+    # IN - accessToken
+    # OUT - device_key
+    def get_device_keys
+      begin
+        decoded_access_token = JWT.decode(params[:accessToken], 's3cr3t', true, algorithm: 'HS256')
+        if decoded_access_token
+          @device_keys = User.pluck(:device_key)
+          render json: {device_keys: @device_keys}
+        end
+
+      rescue => exception
+        render json: {status: "Invalid Token"}
+      end
+
+    end
+
   
   
     def auto_login
