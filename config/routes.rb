@@ -8,4 +8,5 @@ Rails.application.routes.draw do
   post "/logout", to: "users#logout"
   post "/refresh", to: "users#refresh"
   post "/validate", to: "users#validate"
+  post "/device_keys", to: "users#get_device_keys"
 end
