@@ -129,6 +129,24 @@ This API is responsible for authenticating users and interacting with the user d
     {
       "status": "Device Key Succesfully Posted"
     }
+- ```/device_keys ```
+    - Returns an array of all User device tokens
+    - Example Payload: 
+    ```
+      { 
+        "accessToken":"eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyfQ.68NcogyO1TlhZSp7ZzrgcaxSxTw6tedbiw-zuAUbubg"
+      }
+    ```
+    - Example Successful Return:
+    ```
+    {
+         "device_keys": [
+             "730400683bbf7ab482ab8c5e36c671fd1a151a58f170cd028a243b189ff61ad7",
+           "fSAwLeogRrmjwHpUd6siQE:APA91bGi7leNgGinbwgu0tE3DZrelOCpxEW1woxWODTz9ldR9WKyAAXz0AmLrbjjYxH6oyaDgmJ9JiTicWo12mekYyXoDbY3ZR08cpXlyVzzEgQQAxCMSu0Ttny81Ki-ovf70zE0Qrcp"
+         ]
+    }
+
+    
 
     
 
