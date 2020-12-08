@@ -13,7 +13,7 @@ This API is responsible for authenticating users and interacting with the user d
 ### Host
 http://a87713a1fd4b64cd4b788e8a1592de07-1206905140.us-west-2.elb.amazonaws.com
 
-### Development Environment
+## Development Environment
 - Run ``` bundle install ``` in root directory
 - Start server with ``` rails s ```
      - Default command runs server on ```localhost:3000```
